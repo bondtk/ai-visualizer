@@ -346,6 +346,15 @@ const AV = (() => {
         text: (known ? pct + "%" : "\u2014") + (rel ? "  " + rel : "")
       });
     }
+    // Which model is answering, published by the voice line alongside the
+    // usage windows. A name is not spend, so it shows even when usage is
+    // hidden. Absent, no row.
+    if (rl.model) {
+      out.push({
+        label: "MODEL", pct: null, known: false, hot: false,
+        text: String(rl.model).toUpperCase()
+      });
+    }
     return out;
   };
   U.mix = (c1, c2, t) => [c1[0] + (c2[0] - c1[0]) * t | 0,
