@@ -184,11 +184,22 @@ function syncUsage(){
     `${r.label}<span class="n${r.hot?" hot":""}">${r.text}</span>`).join("<br>");
 }
 
+let thinkStart=0;
+function thinkLabel(){
+  const secs=Math.floor((Date.now()-thinkStart)/1000);
+  return 'THINKING'+(secs>=3?' '+secs+'s':'')+'<span class="spin"></span>';
+}
+/* the seconds counter: syncHUD only fires on state changes, so tick it here */
+setInterval(()=>{
+  if(AV.state==="thinking"&&thinkStart)$("statemode").innerHTML=thinkLabel();
+},1000);
+
 function syncHUD(){
   const mode=$("statemode"),hint=$("hint");
   const s=AV.state;
   if(s==="thinking"){
-    mode.innerHTML='THINKING<span class="spin"></span>';
+    thinkStart=Date.now();
+    mode.innerHTML=thinkLabel();
     hint.querySelector(".proc").style.display="inline";hint.querySelector(".idlehint").style.display="none";
   }else{
     mode.textContent=s==="speaking"?"SPEAKING":s==="listening"?"LISTENING":"IDLE";
